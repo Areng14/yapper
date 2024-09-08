@@ -1,7 +1,7 @@
-const { Schema, Model } = require("mongoose")
+const mongoose = require("mongoose")
 const bcrypt = require("bcryptjs")
 const jst = require("jsonwebtoken")
-const UserSchema = new Schema({
+const UserSchema = new mongoose.Schema({
     userID: {
         type: Number,
         require: true
@@ -25,4 +25,4 @@ const UserSchema = new Schema({
     }
 })
 
-module.exports = new model("User", UserSchema)
+module.exports = new mongoose.model("User", UserSchema)

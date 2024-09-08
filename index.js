@@ -2,7 +2,7 @@ const express = require("express")
 const app = express()
 const bodyparser = require("body-parser")
 const { connect } = require("mongoose")
-const { DB, PORT} = require("./config/db")
+const {DB, PORT} = require("./config/db")
 const passport = require("passport")
 require("dotenv").config()
 
