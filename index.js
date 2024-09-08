@@ -6,11 +6,12 @@ const {DB, PORT} = require("./config/db")
 const passport = require("passport")
 require("dotenv").config()
 
-app.use('/api',require("./view/authView"))
 app.use(passport.initialize())
 app.use(express.json())
 app.use(bodyparser.json())
 app.use(bodyparser.urlencoded({extended:true}))
+
+app.use('/api',require("./view/authView"))
 
 app.get("/", (req, res) => {
     return res.status(200).json({appName : "yapper"})
