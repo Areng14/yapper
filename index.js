@@ -3,7 +3,7 @@ const app = express()
 const bodyparser = require("body-parser")
 const { connect } = require("mongoose")
 const {DB, PORT} = require("./config/db")
-const passport = require("passport")
+const passport = require("./middleware/passportConfig")
 require("dotenv").config()
 
 app.use(passport.initialize())
