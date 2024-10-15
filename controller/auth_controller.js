@@ -47,8 +47,19 @@ const getUserDetailById = async ( userId, res ) => {
     return res.status(200).json({success:true, message: "get data OK",data: user})
 }
 
+const getAllUsers = async ( req, res ) => {
+    const userId2 = req.user.userID
+    const user_list = await UserModel.find({})
+    if (user_list.length == 0) {
+        return res.status(200).json({success:false,message: "No users."})
+    }
+    const filtered = user_list.filter((item) => item.userID != userId2)
+    return res.status(200).json({success:true, message: "get data OK", total: filtered.length, data: filtered})
+}
+
 module.exports = {
     userRegister,
     login,
-    getUserDetailById
+    getUserDetailById,
+    getAllUsers
 }
