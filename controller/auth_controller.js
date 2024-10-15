@@ -36,7 +36,7 @@ const login = async (loginBody,res) => {
     const token = generateToken(checkUsername.userID);
     res.cookie('jwt', token)
 
-    return res.status(200).json({success:true, message: "Login OK",data: "Baerer " + token})
+    return res.status(200).json({success:true, message: "Login OK",data: "Bearer " + token})
 }
 
 const getUserDetailById = async ( userBody, res ) => {
