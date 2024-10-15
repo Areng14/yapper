@@ -4,6 +4,8 @@ const bodyparser = require("body-parser")
 const { connect } = require("mongoose")
 const {DB, PORT} = require("./config/db")
 const passport = require("./middleware/passportConfig")
+const socketIo = require("socket.io")
+const http = require("http")
 require("dotenv").config()
 
 app.use(passport.initialize())
@@ -22,6 +24,22 @@ const init = async () => {
     await connect(DB)
     console.log("Connected to DB.")
 }
+
+const server = http.createServer(app)
+const io = socketIo(server)
+app.use(express.static('public'))
+
+io.on('connection', (stream) => {
+    console.log("User connected.")
+
+    stream.on("chatMessage", (msg) => {
+        io.emit('Chat : ', msg)
+    })
+
+    stream.on("disconnect", () => {
+        console.log("User disconnected.")
+    })
+})
 
 app.listen(PORT, async () => {
     init()
