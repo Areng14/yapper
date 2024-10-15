@@ -36,17 +36,14 @@ const login = async (loginBody,res) => {
     const token = generateToken(checkUsername.userID);
     res.cookie('jwt', token)
 
-    return res.status(200).json({success:true, message: "Login OK",data: "Baerer " + token})
+    return res.status(200).json({success:true, message: "Login OK",data: "Bearer " + token})
 }
 
-const getUserDetailById = async ( userBody, res ) => {
-    const { userId } = userBody
-
+const getUserDetailById = async ( userId, res ) => {
     const user = await UserModel.findOne({userID: userId})
     if (!user) {
         return res.status(404).json({success:false,message: "User not found."})
     }
-
     return res.status(200).json({success:true, message: "get data OK",data: user})
 }
 
