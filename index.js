@@ -15,6 +15,7 @@ app.use(bodyparser.urlencoded({extended:true}))
 
 app.use('/api',require("./view/authView"))
 app.use('/api/user', require("./view/userView"))
+app.use('/api/message', require("./view/msgView"))
 
 app.get("/", (req, res) => {
     return res.status(200).json({appName : "yapper"})
