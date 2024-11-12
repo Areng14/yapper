@@ -4,47 +4,57 @@ const crypto = require('crypto')
 const { generateToken } = require("../middleware/auth")
 
 const userRegister = async (userDetails, res) => {
-    const { password,username } = userDetails
+    const { password, username } = userDetails
 
-    const checkUser = await UserModel.findOne({username:username})
+    const checkUser = await UserModel.findOne({ username: username })
     if (checkUser) {
-        return res.status(500).json({success:false, message: "username taken"})
+        return res.status(500).json({ success: false, message: "username taken" })
     }
-    
+
     const hashPass = await bcrypt.hash(password, 12)
 
     const userID = crypto.randomUUID()
-    const newUser = new UserModel({...userDetails, password: hashPass, userID: userID})
+    const newUser = new UserModel({ ...userDetails, password: hashPass, userID: userID })
     await newUser.save()
 
-    return res.status(201).json({data: newUser})
+    return res.status(201).json({ data: newUser })
 }
 
-const login = async (loginBody,res) => {
+const login = async (loginBody, res) => {
     const { username, password } = loginBody
 
-    const checkUsername = await UserModel.findOne({username:username})
+    const checkUsername = await UserModel.findOne({ username: username })
     if (!checkUsername) {
-        return res.status(404).json({success:false,message: "Username not found."})
+        return res.status(404).json({ success: false, message: "Username not found." })
     }
 
     const isMatch = await bcrypt.compare(password, checkUsername.password)
     if (!isMatch) {
-        return res.status(400).json({success:false, message: "Incorrect Password."})
+        return res.status(400).json({ success: false, message: "Incorrect Password." })
     }
 
     const token = generateToken(checkUsername.userID);
     res.cookie('jwt', token)
 
-    return res.status(200).json({success:true, message: "Login OK",data: "Bearer " + token})
+    return res.status(200).json({ success: true, message: "Login OK", data: "Bearer " + token })
 }
 
-const getUserDetailById = async ( userId, res ) => {
-    const user = await UserModel.findOne({userID: userId})
+const getUserDetailById = async (userId, res) => {
+    const user = await UserModel.findOne({ userID: userId })
     if (!user) {
-        return res.status(404).json({success:false,message: "User not found."})
+        return res.status(404).json({ success: false, message: "User not found." })
     }
-    return res.status(200).json({success:true, message: "get data OK",data: user})
+    return res.status(200).json({ success: true, message: "get data OK", data: user })
+}
+
+const getUserList = async (req, res) => {
+    const my_id = req.user.userID
+    const user_list = await UserModel.find({})
+    if (user_list.length == 0) {
+        return res.status(200).json({ success: false, message: "no user data" })
+    }
+    const filter_user_list = user_list.filter((item) => item.userID != my_id)
+    return res.status(200).json({ success: true, message: "get data OK", data: filter_user_list, total: filter_user_list.length })
 }
 
 const getAllUsers = async ( req, res ) => {
