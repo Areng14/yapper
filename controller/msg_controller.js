@@ -6,4 +6,4 @@ const getAllMessage = async (getAllMessageParam, res) => {
     return res.json({success: true, data: msg_list})
 }
 
-module.exports = (getAllMessage)
+module.exports = getAllMessage
