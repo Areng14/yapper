@@ -1,7 +1,7 @@
 const MessageModel = require('../models/message')
 
 const getAllMessage = async (getAllMessageParam, res) => {
-    cibst (sendID, reciveID) = getAllMessageParam
+    const {sendID, reciveID} = getAllMessageParam
     const msg_list = await MessageModel.find({sender: sendID,  reciver: reciveID})
     return res.json({success: true, data: msg_list})
 }
